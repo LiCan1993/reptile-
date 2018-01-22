@@ -1,0 +1,45 @@
+# Author Li
+#爬取霉图片
+import requests,urllib.request
+import time
+from bs4 import BeautifulSoup
+headers={
+    'User-Agent':'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36'
+
+}
+#浏览器伪装
+proxies={"http": "http://121.69.29.162:8118"
+
+}
+#反爬代理
+def get_image(url):#获取图片url
+    images=[]
+    web_data=requests.get(url,headers=headers,proxies=proxies)
+    soup=BeautifulSoup(web_data.text,'lxml')
+    image=soup.select('img.entry-thumbnail')
+
+    for i in image:
+       images.append(i.get('src'))
+    return images
+
+
+def down_more_Img(number):
+
+  for i in range(number):
+     url='https://weheartit.com/inspirations/taylorswift?scrolling=true&page=%s'%str(i)
+
+     getImg(get_image(url))
+     time.sleep(2)
+
+def getImg(images):#
+    file_path='/meimei/b/'
+
+
+    for i in images:
+
+        data=urllib.request.urlretrieve(i,file_path+i.split('/')[-2]+i.split('/')[-1])
+        print('%s图片已下载成功'%i.split('/')[-2])
+
+
+
+down_more_Img(5)
